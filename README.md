@@ -136,7 +136,6 @@ Response:
     "id": 1,
     "name": "Dr. Smith",
     "email": "drsmith@example.com",
-    "specialization": "Cardiology"
   }
 ]
 ```
@@ -239,39 +238,11 @@ mvn package
 mvn package -DskipTests
 ```
 
-### Testing
-```bash
-# Run unit tests
-mvn test
 
-# Run integration tests
-mvn verify
-```
 
-### Code Style
-This project follows the Google Java Style Guide. A formatter configuration file is provided in the repository.
 
-## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
-### Coding Standards
-- Write unit tests for new features
-- Update documentation for API changes
-- Follow existing code style and conventions
-- Keep commits atomic and write meaningful commit messages
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Support
-
-For support and queries, please open an issue in the GitHub repository or contact the maintenance team at support@yourdomain.com.
 
 ---
 
