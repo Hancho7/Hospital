@@ -8,48 +8,42 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 
 @Slf4j
 @Service
 public class EmailService {
     private final TemplateEngine templateEngine;
     private final EmailClient emailClient;
-    
+
     @Value("${azure.communication.email.sender}")
     private String fromEmail;
-    
-    @Value("${app.base-url}")
-    private String baseUrl;
-    
-    public EmailService(TemplateEngine templateEngine, 
-                        @Value("${azure.communication.email.connection-string}") String connectionString) {
+
+    public EmailService(TemplateEngine templateEngine,
+            @Value("${azure.communication.email.connection-string}") String connectionString) {
         this.templateEngine = templateEngine;
         this.emailClient = new EmailClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();
     }
 
-    public void sendVerificationEmail(String to, String name, String token) {
+    public void sendEmail(String to, String subject, String templateName, Map<String, Object> variables) {
         try {
             Context context = new Context();
-            context.setVariable("name", name);
-            context.setVariable("verificationLink", baseUrl + "/api/v1/auth/verify?token=" + token);
-            
-            String htmlContent = templateEngine.process("verification-email", context);
-            
+            context.setVariables(variables); 
+
+            String htmlContent = templateEngine.process(templateName, context);
+
             EmailMessage emailMessage = new EmailMessage()
-                .setSenderAddress(fromEmail)
-                .setToRecipients(to)
-                .setSubject("Verify your email")
-                .setBodyHtml(htmlContent);
-            
-            log.info("Attempting to send verification email to: {}", to);
-            log.info("Sending email", emailClient.beginSend(emailMessage));
-            log.info("Successfully sent verification email to: {}", to);
-            
+                    .setSenderAddress(fromEmail)
+                    .setToRecipients(to)
+                    .setSubject(subject)
+                    .setBodyHtml(htmlContent);
+
+            emailClient.beginSend(emailMessage);
+
         } catch (Exception e) {
-            log.error("Failed to send verification email to: {}. Error: {}", to, e.getMessage(), e);
-            throw new RuntimeException("Failed to send verification email. Please try again later.", e);
+            throw new RuntimeException("Failed to send email. Please try again later.", e);
         }
     }
 }

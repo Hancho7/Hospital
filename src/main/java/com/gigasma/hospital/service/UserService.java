@@ -19,6 +19,8 @@ import com.gigasma.hospital.repository.UserRepository;
 import com.gigasma.hospital.config.JwtUtil;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -52,10 +54,12 @@ public class UserService {
 
         userRepository.save(user);
 
-        emailService.sendVerificationEmail(
-                user.getEmail(),
-                user.getName(),
-                user.getVerificationToken());
+        Map<String, Object> emailVariables = Map.of(
+            "name", user.getName(),
+            "verificationLink", "https://yourapp.com/api/v1/auth/verify?token=" + user.getVerificationToken()
+        );
+
+        emailService.sendEmail(user.getEmail(),"Verification Email","verification-email", emailVariables);
     }
 
     @Transactional
