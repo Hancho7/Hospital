@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  ai:
+    azure:
+      openai:
+        api-key: ${AZURE_OPENAI_KEY}
+        endpoint: ${AZURE_OPENAI_ENDPOINT}
+        chat:
+          options:
+            deployment-name: ${AZURE_OPENAI_DEPLOYMENT}
+            temperature: 0.7
+  application:
+    name: hospital
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+azure:
+  communication:
+    email:
+      connection-string: ${AZURE_COMMUNICATION_STRING}
+      sender: ${AZURE_COMMUNICATION_SENDER}
+
+encryption:
+  key: ${ENCRYPTION_KEY}
+  iv: ${ENCRYPTION_IV}
+
+app:
+  base-url: "http://localhost:8080"
+
+logging:
+  level:
+    web: DEBUG
